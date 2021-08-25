@@ -183,3 +183,4 @@ configure using localhost:9090 and "browser"
 
 
 https://serverfault.com/questions/1042202/how-can-i-measure-pod-startup-time-in-kubernetes
+https://www.youtube.com/watch?v=q8MFm2jwXpA
