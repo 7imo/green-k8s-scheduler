@@ -139,7 +139,7 @@ docker push "${IMAGE}"
 sed 's/a\/b:c/'$(echo "${IMAGE}" | sed 's/\//\\\//')'/' extender.yaml | kubectl apply -f -
 ```
 
-#####  Show if Pod was created:
+#####  Check if pod was created:
 ```
 kubectl get pods --all-namespaces 
 kubectl get pods -n kube-system
@@ -150,27 +150,29 @@ kubectl get pods -n kube-system
 kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-extender-ctr -f
 ```
 
-#####  Deploy Config:
+#####  Deploy test pods:
 ```
 kubectl apply -f Deployment.yaml
 ```
 
-#####  Verify:
-```
-kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
-```
-
 #####  Troubleshooting: 
 ```
+kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
+
 kubectl logs green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system -p
 kubectl describe pods green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system
 kubectl logs -f green-k8s-scheduler-6789dd9f7-fjpnp -c green-k8s-scheduler-extender-ctr -p
-
+```
+# Manual annotation / labeling
+```
 kubectl label nodes <your-node-name> green=true
+kubectl get nodes --show-labels
 kubectl annotate nodes <your-node-name> renewable=0.6
 ```
 
 Liveliness Probe?
+
+# Samples
 https://developer.ibm.com/articles/creating-a-custom-kube-scheduler/
 https://github.com/everpeace/k8s-scheduler-extender-example
 
@@ -192,3 +194,8 @@ configure using localhost:9090 and "browser"
 
 https://serverfault.com/questions/1042202/how-can-i-measure-pod-startup-time-in-kubernetes
 https://www.youtube.com/watch?v=q8MFm2jwXpA
+
+## Run the Electricity Simulator
+
+##### Troubleshooting
+https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
