@@ -65,12 +65,6 @@ aws s3api put-bucket-versioning --bucket greenk8s-ha-state-store  --versioning-c
 aws s3api put-bucket-encryption --bucket greenk8s-ha-state-store --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
 ```
 
-#####  set env variables for the cluster (restart from here)
-```
-export NAME=ha.greenk8s.com
-export KOPS_STATE_STORE=s3://greenk8s-ha-state-store
-```
-
 #####  define availability zones
 ```
 aws ec2 describe-availability-zones --region us-east-1
@@ -80,7 +74,16 @@ aws ec2 describe-availability-zones --region us-east-1
 ```
 aws ec2 create-key-pair --key-name greenkey --query "KeyMaterial" --output text > greenkey.pem
 chmod 400 greenkey.pem
+```
 
+#####  set env variables for the cluster (once the previous steps are done, restart from here)
+```
+export NAME=ha.greenk8s.com
+export KOPS_STATE_STORE=s3://greenk8s-ha-state-store
+```
+
+#####  create cluster
+```
 kops create cluster \
     --node-count=2 \
     --master-count=1 \
@@ -162,11 +165,16 @@ kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 kubectl logs green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system -p
 kubectl describe pods green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system
 kubectl logs -f green-k8s-scheduler-6789dd9f7-fjpnp -c green-k8s-scheduler-extender-ctr -p
+
+kubectl label nodes <your-node-name> green=true
+kubectl annotate nodes <your-node-name> renewable=0.6
 ```
 
 Liveliness Probe?
 https://developer.ibm.com/articles/creating-a-custom-kube-scheduler/
 https://github.com/everpeace/k8s-scheduler-extender-example
+
+
 
 ## Install Prometheus/Grafana Monitoring
 https://computingforgeeks.com/setup-prometheus-and-grafana-on-kubernetes/

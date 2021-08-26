@@ -7,7 +7,7 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 
 # build
-WORKDIR /go/src/green-k8s-scheduler
+WORKDIR /go/src/green-k8s-scheduler/scheduler
 COPY go.mod .
 COPY go.sum .
 RUN GO111MODULE=on go mod download

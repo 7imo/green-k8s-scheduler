@@ -35,4 +35,4 @@ if __name__ == '__main__':
     main()
 
 
-https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
+#https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
