@@ -1,14 +1,13 @@
 package main
 
 import (
-	"log"
-	"math/rand"
 	"strings"
 
 	v1 "k8s.io/api/core/v1"
 	extender "k8s.io/kube-scheduler/extender/v1"
 )
 
+/*
 const (
 	// LuckyPred rejects a node if you're not lucky ¯\_(ツ)_/¯
 	LuckyPred        = "Lucky"
@@ -22,25 +21,36 @@ var predicatesFuncs = map[string]FitPredicate{
 type FitPredicate func(pod *v1.Pod, node v1.Node) (bool, []string, error)
 
 var predicatesSorted = []string{LuckyPred}
+*/
 
 // filter filters nodes according to predicates defined in this extender
 // it's webhooked to pkg/scheduler/core/generic_scheduler.go#findNodesThatFitPod()
 func filter(args extender.ExtenderArgs) *extender.ExtenderFilterResult {
 	var filteredNodes []v1.Node
+	var failReasons []string
 	failedNodes := make(extender.FailedNodesMap)
-	pod := args.Pod
+	//pod := args.Pod
 
-	// TODO: parallelize this
-	// TODO: handle error
 	for _, node := range args.Nodes.Items {
-		fits, failReasons, _ := podFitsOnNode(pod, node)
-		if fits {
+		if node.Labels["green"] == "true" {
 			filteredNodes = append(filteredNodes, node)
 		} else {
-			failedNodes[node.Name] = strings.Join(failReasons, ",")
+			failedNodes[node.Name] = strings.Join(failReasons, "NodeLabelMatchFailure")
 		}
 	}
 
+	/*
+		// TODO: parallelize this
+		// TODO: handle error
+		for _, node := range args.Nodes.Items {
+			fits, failReasons, _ := podFitsOnNode(pod, node)
+			if fits {
+				filteredNodes = append(filteredNodes, node)
+			} else {
+				failedNodes[node.Name] = strings.Join(failReasons, ",")
+			}
+		}
+	*/
 	result := extender.ExtenderFilterResult{
 		Nodes: &v1.NodeList{
 			Items: filteredNodes,
@@ -52,6 +62,7 @@ func filter(args extender.ExtenderArgs) *extender.ExtenderFilterResult {
 	return &result
 }
 
+/*
 func podFitsOnNode(pod *v1.Pod, node v1.Node) (bool, []string, error) {
 	fits := true
 	var failReasons []string
@@ -74,4 +85,4 @@ func LuckyPredicate(pod *v1.Pod, node v1.Node) (bool, []string, error) {
 	}
 	log.Printf("pod %v/%v is unlucky to fit on node %v\n", pod.Name, pod.Namespace, node.Name)
 	return false, []string{LuckyPredFailMsg}, nil
-}
+}*/
