@@ -85,9 +85,9 @@ export KOPS_STATE_STORE=s3://greenk8s-ha-state-store
 #####  create cluster
 ```
 kops create cluster \
-    --node-count=2 \
+    --node-count=4 \
     --master-count=1 \
-    --master-size=t2.large \
+    --master-size=t2.medium \
     --node-size=t2.medium \
     --zones="us-east-1a,us-east-1c" \
     --cloud-labels="purpose=thesis" \
@@ -160,15 +160,20 @@ kubectl apply -f Deployment.yaml
 kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 
 kubectl logs green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system -p
-kubectl describe pods green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system
-kubectl logs -f green-k8s-scheduler-6789dd9f7-fjpnp -c green-k8s-scheduler-extender-ctr -p
+kubectl describe pods green-k8s-scheduler-7f84d9f679-bgg24 -n kube-system
+kubectl logs -f green-k8s-scheduler-7f84d9f679-bgg24 -c green-k8s-scheduler-extender-ctr -p
 ```
 # Manual annotation / labeling
 ```
-kubectl label nodes <your-node-name> green=true
+kubectl label nodes ip-172-20-88-199.ec2.internal green=true
 kubectl get nodes --show-labels
 kubectl annotate nodes <your-node-name> renewable=0.6
 ```
+
+# Manual tainting
+
+kubectl taint nodes ip-172-20-88-199.ec2.internal green=false:NoSchedule-
+kubectl taint nodes ip-172-20-88-199.ec2.internal green=false:NoExecute-
 
 Liveliness Probe?
 
@@ -199,3 +204,9 @@ https://www.youtube.com/watch?v=q8MFm2jwXpA
 
 ##### Troubleshooting
 https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
+
+
+## Taint nodes
+kubectl taint
+
+http://doc.forecast.solar/doku.php?id=api:estimate
