@@ -11,7 +11,7 @@ import (
 
 var (
 	version string
-) // injected via ldflags at build time
+)
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())

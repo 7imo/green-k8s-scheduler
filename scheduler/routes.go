@@ -59,9 +59,10 @@ func Prioritize(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 }
 
-// health check test
+// health check
 func Version(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, fmt.Sprint(version))
 }
 
+// not used
 // func Bind(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {}

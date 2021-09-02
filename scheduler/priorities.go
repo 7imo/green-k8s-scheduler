@@ -6,13 +6,8 @@ import (
 	extender "k8s.io/kube-scheduler/extender/v1"
 )
 
-// It'd better to only define one custom priority per extender
-// as current extender interface only supports one single weight mapped to one extender
-// and also it returns HostPriorityList, rather than []HostPriorityList
-
-// it's webhooked to pkg/scheduler/core/generic_scheduler.go#prioritizeNodes()
 // you can't see existing scores calculated so far by default scheduler
-// instead, scores output by this function will be added back to default scheduler
+// scores output by this function will be added back to default scheduler
 func prioritize(args extender.ExtenderArgs) *extender.HostPriorityList {
 	pod := args.Pod
 	nodes := args.Nodes.Items
