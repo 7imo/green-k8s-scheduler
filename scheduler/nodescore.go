@@ -18,6 +18,7 @@ func calculateScores(args extender.ExtenderArgs) map[string]int {
 	// read renewable shares from node annotations
 	for i, node := range nodes {
 		log.Printf("Node %v is at loop %v", node.Name, i)
+		//TODO: Error handling if annotation non exist
 		renewableShare, err := strconv.ParseFloat(node.Annotations["renewable"], 32)
 		if err != nil {
 			log.Printf("error running program: %s \n", err.Error())

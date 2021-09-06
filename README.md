@@ -85,7 +85,7 @@ export KOPS_STATE_STORE=s3://greenk8s-ha-state-store
 #####  create cluster
 ```
 kops create cluster \
-    --node-count=4 \
+    --node-count=3 \
     --master-count=1 \
     --master-size=t2.medium \
     --node-size=t2.medium \
@@ -137,6 +137,8 @@ docker push "${IMAGE}"
 #####  Run extender image
 ```
 sed 's/a\/b:c/'$(echo "${IMAGE}" | sed 's/\//\\\//')'/' extender.yaml | kubectl apply -f -
+
+kubectl apply -f extender.yaml
 ```
 
 #####  Check if pod was created:
@@ -162,10 +164,13 @@ kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 kubectl logs green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system -p
 kubectl describe pods green-k8s-scheduler-7f84d9f679-bgg24 -n kube-system
 kubectl logs -f green-k8s-scheduler-7f84d9f679-bgg24 -c green-k8s-scheduler-extender-ctr -p
+kubectl -n kube-system logs deploy/green-k8s-descheduler -c green-k8s-descheduler -f
+kubectl get deployment --namespace=kube-system
+kubectl delete deployment green-k8s-descheduler -n kube-system
 ```
 # Manual annotation / labeling
 ```
-kubectl label nodes ip-172-20-88-199.ec2.internal green=true
+kubectl label nodes ip-172-20-90-143.ec2.internal green=true
 kubectl get nodes --show-labels
 kubectl annotate nodes <your-node-name> renewable=0.6
 ```

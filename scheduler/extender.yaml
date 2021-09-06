@@ -63,7 +63,6 @@ data:
     ],
     "extenders" : [{
       "urlPrefix": "http://localhost:80",
-      "filterVerb": "filter",
       "prioritizeVerb": "prioritize",
       "weight": 1,
       "enableHttps": false,
@@ -106,7 +105,7 @@ spec:
         - name: green-k8s-scheduler-config
           mountPath: /green-k8s-scheduler
       - name: green-k8s-scheduler-extender-ctr
-        image: a/b:c
+        image: timokraus/green-k8s-scheduler
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
