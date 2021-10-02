@@ -163,11 +163,11 @@ kubectl apply -f Deployment.yaml
 ```
 kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 
-kubectl logs green-k8s-scheduler-6789dd9f7-fjpnp -n kube-system -p
+kubectl logs green-k8s-descheduler-56d745498f-km96r -n kube-system -p
 kubectl describe pods green-k8s-scheduler-7f84d9f679-bgg24 -n kube-system
 kubectl logs -f green-k8s-scheduler-7f84d9f679-bgg24 -c green-k8s-scheduler-extender-ctr -p
 kubectl -n kube-system logs deploy/green-k8s-descheduler -c green-k8s-descheduler -f
-kubectl get deployment --namespace=kube-system
+kubectl get deployment green-k8s-descheduler --namespace=kube-system
 kubectl delete deployment green-k8s-descheduler -n kube-system
 ```
 # Manual annotation / labeling
