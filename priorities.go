@@ -14,7 +14,7 @@ func prioritize(args extender.ExtenderArgs) *extender.HostPriorityList {
 
 	log.Printf("Calculating node priorities for pod %v ...", pod.Name)
 
-	nodeScoreMap := calculateScores(args)
+	nodeScoreMap := CalculateScoresFromRenewables(args)
 	hostPriorityList := make(extender.HostPriorityList, len(nodes))
 
 	for i, node := range nodes {

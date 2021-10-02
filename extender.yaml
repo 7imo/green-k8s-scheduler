@@ -106,7 +106,7 @@ spec:
           mountPath: /green-k8s-scheduler
       - name: green-k8s-scheduler-extender-ctr
         image: timokraus/green-k8s-scheduler
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /version

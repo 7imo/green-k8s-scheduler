@@ -124,6 +124,10 @@ kops delete cluster --name ${NAME} --yes
 https://www.poeticoding.com/create-a-high-availability-kubernetes-cluster-on-aws-with-kops/
 https://serverfault.com/questions/993888/kubernetes-with-kops-in-aws-how-to-attach-iam-policies-to-the-iam-role-used-to
 
+For kubectl error: You must be logged in to the server (Unauthorized) set state store env variable and export kubecfg:
+```
+kops export kubecfg --admin 
+```
 
 ## Deploy Scheduler Extension
 
@@ -136,8 +140,6 @@ docker push "${IMAGE}"
 
 #####  Run extender image
 ```
-sed 's/a\/b:c/'$(echo "${IMAGE}" | sed 's/\//\\\//')'/' extender.yaml | kubectl apply -f -
-
 kubectl apply -f extender.yaml
 ```
 
@@ -215,3 +217,12 @@ https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-
 kubectl taint
 
 http://doc.forecast.solar/doku.php?id=api:estimate
+
+## Create Dashboard
+
+https://github.com/kubernetes/dashboard
+
+
+### aob
+https://stackoverflow.com/questions/62803041/how-to-evict-or-delete-pods-from-kubernetes-using-golang-client
+https://stackoverflow.com/questions/53857593/how-to-get-status-of-a-pod-in-kubernetes-using-go-client

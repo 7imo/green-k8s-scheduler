@@ -63,6 +63,3 @@ func Prioritize(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 func Version(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, fmt.Sprint(version))
 }
-
-// not used
-// func Bind(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {}

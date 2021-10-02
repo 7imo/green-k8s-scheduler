@@ -2,9 +2,7 @@ package main
 
 import (
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -13,9 +11,9 @@ var (
 	version string
 )
 
-func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
-}
+//func init() {
+//	rand.Seed(time.Now().UTC().UnixNano())
+//}
 
 func main() {
 	router := httprouter.New()

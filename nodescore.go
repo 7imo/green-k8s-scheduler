@@ -2,31 +2,51 @@ package main
 
 import (
 	"log"
+	"math"
 	"strconv"
 
 	extender "k8s.io/kube-scheduler/extender/v1"
 )
 
-const MAX_SCORE = 10.0
+const MAX_SCORE = 100
 
-func calculateScores(args extender.ExtenderArgs) map[string]int {
+func CalculateScoresFromRenewables(args extender.ExtenderArgs) map[string]int {
 
-	nodeScoreMap := make(map[string]int)
+	renewables := make(map[string]float64)
 	nodes := args.Nodes.Items
-	var score int
 
 	// read renewable shares from node annotations
-	for i, node := range nodes {
-		log.Printf("Node %v is at loop %v", node.Name, i)
-		//TODO: Error handling if annotation non exist
-		renewableShare, err := strconv.ParseFloat(node.Annotations["renewable"], 32)
+	for _, node := range nodes {
+
+		log.Printf("Parsing renewable share of node %v", node.Name)
+		renewableShare, err := strconv.ParseFloat(node.Annotations["renewable"], 64)
 		if err != nil {
-			log.Printf("error running program: %s \n", err.Error())
+			log.Printf("Error parsing renewable share from node: %s \n", err.Error())
+			renewableShare = 0
 		}
-		score = int(renewableShare * MAX_SCORE)
-		log.Printf("Node %v will be assigned a Score of %v", node.Name, score)
-		nodeScoreMap[node.Name] = score
+
+		log.Printf("Node %v has a renewable share of %v", node.Name, renewableShare)
+		renewables[node.Name] = float64(renewableShare)
 	}
 
-	return nodeScoreMap
+	return NormalizeScores(renewables)
+}
+
+func NormalizeScores(renewables map[string]float64) map[string]int {
+	highest := 1.0
+	scores := make(map[string]int)
+	var score int
+
+	for _, renewableShare := range renewables {
+		highest = math.Max(highest, renewableShare)
+		log.Printf("Highest share so far: %v", highest)
+	}
+
+	for node, renewableShare := range renewables {
+		score = int(renewableShare * MAX_SCORE / highest)
+		scores[node] = score
+		log.Printf("Node %v has a score of %v", node, score)
+	}
+
+	return scores
 }
