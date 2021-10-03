@@ -8,7 +8,7 @@ import (
 	extender "k8s.io/kube-scheduler/extender/v1"
 )
 
-const MAX_SCORE = 100
+const MAX_SCORE = 10
 
 func CalculateScoresFromRenewables(args extender.ExtenderArgs) map[string]int {
 
