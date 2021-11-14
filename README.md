@@ -89,7 +89,7 @@ kops create cluster \
     --master-count=1 \
     --master-size=t2.medium \
     --node-size=t2.medium \
-    --zones="us-east-1a,us-east-1c" \
+    --zones="us-east-1a" \
     --cloud-labels="purpose=thesis" \
     ${NAME}
 ```
@@ -140,7 +140,7 @@ docker push "${IMAGE}"
 
 #####  Run extender image
 ```
-kubectl apply -f extender.yaml
+kubectl apply -f scheduler.yaml
 ```
 
 #####  Check if pod was created:
@@ -165,8 +165,8 @@ kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 
 kubectl logs green-k8s-descheduler-56d745498f-km96r -n kube-system -p
 kubectl describe pods green-k8s-scheduler-7f84d9f679-bgg24 -n kube-system
-kubectl logs -f green-k8s-scheduler-7f84d9f679-bgg24 -c green-k8s-scheduler-extender-ctr -p
-kubectl -n kube-system logs deploy/green-k8s-descheduler -c green-k8s-descheduler -f
+kubectl logs -f green-k8s-scheduler-584f5649b8-pfn7j -c green-k8s-scheduler-extender-ctr -p
+kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler -f
 kubectl get deployment green-k8s-descheduler --namespace=kube-system
 kubectl delete deployment green-k8s-descheduler -n kube-system
 ```
@@ -226,3 +226,10 @@ https://github.com/kubernetes/dashboard
 ### aob
 https://stackoverflow.com/questions/62803041/how-to-evict-or-delete-pods-from-kubernetes-using-golang-client
 https://stackoverflow.com/questions/53857593/how-to-get-status-of-a-pod-in-kubernetes-using-go-client
+https://math.stackexchange.com/questions/684519/what-is-the-most-scientific-way-to-assign-weights-to-historical-data/684629
+
+### metrics 
+https://stackoverflow.com/questions/52763291/get-current-resource-usage-of-a-pod-in-kubernetes-with-go-client
+https://stackoverflow.com/questions/52029656/how-to-retrieve-kubernetes-metrics-via-client-go-and-golang
+https://www.datadoghq.com/blog/how-to-collect-and-graph-kubernetes-metrics/
+https://thecloudblog.net/lab/practical-top-down-resource-monitoring-of-a-kubernetes-cluster-with-metrics-server/
