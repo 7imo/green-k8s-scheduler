@@ -23,7 +23,7 @@ func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 	for _, node := range nodeList.Items {
 
 		shares_string := node.Annotations["renewable"]
-		if shares_string != "" {
+		if shares_string == "" {
 			log.Printf("Error parsing renewable share from node %v: No values found. Assigning a renewable energy share of 0.", node.Name)
 			shares_string = "0.0"
 		}
@@ -35,7 +35,7 @@ func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 		// convert strings to floats
 		for i := 0; i < len(shares); i += 1 {
 			f64, _ := strconv.ParseFloat(shares[i], 64)
-			shares_float[i] = float64(f64)
+			shares_float = append(shares_float, float64(f64))
 		}
 
 		// Logs for Debugging
