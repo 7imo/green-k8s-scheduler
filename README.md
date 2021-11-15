@@ -211,6 +211,7 @@ https://www.youtube.com/watch?v=q8MFm2jwXpA
 
 ##### Troubleshooting
 https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
+https://deepdive.tw/2017/01/04/installing-kubernetes-on-aws-with-kops/
 
 
 ## Taint nodes

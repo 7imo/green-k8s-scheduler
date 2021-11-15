@@ -38,6 +38,9 @@ func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 			shares_float[i] = float64(f64)
 		}
 
+		// Logs for Debugging
+		log.Printf("Renewable shares parsed from Node %v: %v", node.Name, shares_float)
+
 		renewables[node.Name] = shares_float
 	}
 
@@ -81,6 +84,7 @@ func weightScores(nodeScores map[string][]float64) map[string]int {
 		weights = append(weights, math.Pow(WEIGHT_CONSTANT, i)/(1-WEIGHT_CONSTANT))
 	}
 
+	// TODO: Config for scheduling short vs. long running applications?
 	if short_running_app {
 		sort.Sort(sort.Reverse(sort.Float64Slice(weights)))
 	}
@@ -119,6 +123,11 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 		}
 	}
 
+	// Logs for Debugging
+	for key, value := range normalizedScores {
+		log.Printf("Renewable share scores calculated for Node %v: %v", key, value)
+	}
+
 	return normalizedScores
 }
 
@@ -127,6 +136,11 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 	var nodeShares = parseRenewablesFromNodes(nodeList)
 	var nodeScores = calculateRenewableScores(nodeShares)
 	var weightedTotalScores = weightScores(nodeScores)
+
+	// Logs for Debugging
+	for key, value := range weightedTotalScores {
+		log.Printf("Total weighted score calculated for Node %v: %v", key, value)
+	}
 
 	return weightedTotalScores
 }
