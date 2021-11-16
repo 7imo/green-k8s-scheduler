@@ -1,5 +1,5 @@
 FROM golang:1.17-alpine as builder
-ARG VERSION=0.0.1
+ARG VERSION=1.0.0
 
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0

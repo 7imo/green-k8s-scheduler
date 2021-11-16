@@ -3,10 +3,13 @@
 
 ##### Install prerequisites for local machine
 ```
-brew update && brew install kops
+curl -LO https://github.com/kubernetes/kops/releases/download/v1.21.0/kops-darwin-amd64
+chmod +x kops-darwin-amd64
+sudo mv kops-darwin-amd64 /usr/local/bin/kops
 brew install kubernetes-cli
 pip install awscli
 ```
+Note: Latest kOps version (1.22) breaks the extender
 
 #####  Set up AWS according to https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/setting-up.html
 
@@ -164,8 +167,8 @@ kubectl apply -f Deployment.yaml
 kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
 
 kubectl logs green-k8s-descheduler-56d745498f-km96r -n kube-system -p
-kubectl describe pods green-k8s-scheduler-7f84d9f679-bgg24 -n kube-system
-kubectl logs -f green-k8s-scheduler-584f5649b8-pfn7j -c green-k8s-scheduler-extender-ctr -p
+kubectl describe pods green-k8s-scheduler-584f5649b8-4dgxv  -n kube-system
+kubectl logs -f green-k8s-scheduler-584f5649b8-4dgxv -c green-k8s-scheduler-extender-ctr -p
 kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler -f
 kubectl get deployment green-k8s-descheduler --namespace=kube-system
 kubectl delete deployment green-k8s-descheduler -n kube-system

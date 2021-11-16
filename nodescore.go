@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"math"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -12,8 +13,9 @@ import (
 
 const MAX_SCORE = 10.0
 
-// float between 0-1: smaller = steeply sloping weights; bigger = more even weights
-const WEIGHT_CONSTANT = 0.75 // results in weights: [4 3 2.25 1.6875 1.265625]
+// reads envs from deployment
+var mode = os.Getenv("MODE")
+var weight = os.Getenv("WEIGHT")
 
 func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 
@@ -25,7 +27,7 @@ func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 		shares_string := node.Annotations["renewable"]
 		if shares_string == "" {
 			log.Printf("Error parsing renewable share from node %v: No values found. Assigning a renewable energy share of 0.", node.Name)
-			shares_string = "0.0"
+			shares_string = "0.0;0.0;0.0;0.0;0.0"
 		}
 
 		// split string into slice with single values
@@ -73,19 +75,19 @@ func normalizeScores(weightedScores map[string]float64) map[string]int {
 	return normalizedNodeScores
 }
 
-func weightScores(nodeScores map[string][]float64) map[string]int {
+func weightScores(nodeScores map[string][]float64, mode string, weight string) map[string]int {
 
 	var weights []float64
-	var short_running_app bool = true
+	var weightConstant, _ = strconv.ParseFloat(weight, 64)
 	weightedNodeScores := make(map[string]float64)
 
 	// exponential function to distribute weights to each renewable measurement
 	for i := 0.0; i < 5; i++ {
-		weights = append(weights, math.Pow(WEIGHT_CONSTANT, i)/(1-WEIGHT_CONSTANT))
+		weights = append(weights, math.Pow(weightConstant, i)/(1-weightConstant))
 	}
 
-	// TODO: Config for scheduling short vs. long running applications?
-	if short_running_app {
+	// favor-present is default
+	if mode != "favor-future" {
 		sort.Sort(sort.Reverse(sort.Float64Slice(weights)))
 	}
 
@@ -133,9 +135,11 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 
 func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
+	log.Printf("Scheduling mode %v with a weight constant of %v", mode, weight)
+
 	var nodeShares = parseRenewablesFromNodes(nodeList)
 	var nodeScores = calculateRenewableScores(nodeShares)
-	var weightedTotalScores = weightScores(nodeScores)
+	var weightedTotalScores = weightScores(nodeScores, mode, weight)
 
 	// Logs for Debugging
 	for key, value := range weightedTotalScores {
