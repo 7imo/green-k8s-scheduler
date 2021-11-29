@@ -19,7 +19,6 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.GET("/version", Version)
-	router.POST("/filter", Filter)
 	router.POST("/prioritize", Prioritize)
 
 	log.Fatal(http.ListenAndServe(":80", router))

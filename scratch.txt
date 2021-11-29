@@ -1,0 +1,25 @@
+  {
+    "kind" : "Policy",
+    "apiVersion" : "v1",
+    "predicates" : [
+      {"name" : "PodFitsHostPorts"},
+      {"name" : "PodFitsResources"},
+      {"name" : "NoDiskConflict"},
+      {"name" : "MatchNodeSelector"},
+      {"name" : "HostName"}
+    ],
+    "priorities" : [
+      {"name" : "LeastRequestedPriority", "weight" : 1},
+      {"name" : "BalancedResourceAllocation", "weight" : 1},
+      {"name" : "ServiceSpreadingPriority", "weight" : 1},
+      {"name" : "EqualPriority", "weight" : 1}
+    ],
+    "extenders" : [{
+      "urlPrefix": "http://localhost:80",
+      "prioritizeVerb": "prioritize",
+      "weight": 1,
+      "enableHttps": false,
+      "nodeCacheCapable": false
+    }],
+    "hardPodAffinitySymmetricWeight" : 10
+  }

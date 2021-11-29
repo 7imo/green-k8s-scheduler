@@ -135,6 +135,14 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 
 func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
+	// default
+	if mode == "" {
+		mode = "favor-present"
+	}
+	if weight == "" {
+		weight = "0.75"
+	}
+
 	log.Printf("Scheduling mode %v with a weight constant of %v", mode, weight)
 
 	var nodeShares = parseRenewablesFromNodes(nodeList)

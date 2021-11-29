@@ -56,10 +56,6 @@ data:
       {"name" : "HostName"}
     ],
     "priorities" : [
-      {"name" : "LeastRequestedPriority", "weight" : 1},
-      {"name" : "BalancedResourceAllocation", "weight" : 1},
-      {"name" : "ServiceSpreadingPriority", "weight" : 1},
-      {"name" : "EqualPriority", "weight" : 1}
     ],
     "extenders" : [{
       "urlPrefix": "http://localhost:80",
@@ -88,6 +84,13 @@ spec:
       labels:
         app: green-k8s-scheduler
     spec:
+      nodeSelector:
+        node-role.kubernetes.io/master: ''
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Equal
+        value: ''
+        effect: NoSchedule
       serviceAccountName: green-k8s-scheduler
       volumes:
       - name: green-k8s-scheduler-config
