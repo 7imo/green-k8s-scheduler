@@ -91,7 +91,7 @@ kops create cluster \
     --node-count=3 \
     --master-count=1 \
     --master-size=t2.medium \
-    --node-size=t2.medium \
+    --node-size=t2.small \
     --zones="us-east-1a" \
     --cloud-labels="purpose=thesis" \
     ${NAME}

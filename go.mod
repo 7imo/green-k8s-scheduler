@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0
-	k8s.io/api v0.22.1
+	k8s.io/api v0.22.4
 	k8s.io/kube-scheduler v0.22.1
 )
 
@@ -20,7 +20,29 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8s.io/apimachinery v0.22.1 // indirect
+	k8s.io/apimachinery v0.22.4 // indirect
+	k8s.io/client-go v0.22.4
 	k8s.io/klog/v2 v2.20.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.1.2 // indirect
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
+	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22 // indirect
+	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
+	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
+	google.golang.org/appengine v1.6.5 // indirect
+	google.golang.org/protobuf v1.26.0 // indirect
+	k8s.io/metrics v0.22.4
+	k8s.io/utils v0.0.0-20210819203725-bdf08cb9a70a // indirect
+	sigs.k8s.io/yaml v1.2.0 // indirect
+)
+
+require (
+	github.com/googleapis/gnostic v0.5.5 // indirect
+	github.com/imdario/mergo v0.3.5 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
 	"log"
 	"math"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/tools/clientcmd"
+	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
 
 	v1 "k8s.io/api/core/v1"
 )
@@ -17,36 +22,46 @@ const MAX_SCORE = 10.0
 var mode = os.Getenv("MODE")
 var weight = os.Getenv("WEIGHT")
 
-func parseRenewablesFromNodes(nodeList *v1.NodeList) map[string][]float64 {
+func parseDataFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 
-	renewables := make(map[string][]float64)
+	nodeEnergyData := make(map[string][]float64)
+	var energyData []float64
 
 	// read renewable shares from node annotations
 	for _, node := range nodeList.Items {
 
-		shares_string := node.Annotations["renewable"]
-		if shares_string == "" {
-			log.Printf("Error parsing renewable share from node %v: No values found. Assigning a renewable energy share of 0.", node.Name)
-			shares_string = "0.0;0.0;0.0;0.0;0.0"
+		nominalMax := node.Annotations["nominal_power"]
+		if nominalMax == "" {
+			// this value is known in real setups
+			log.Printf("Error parsing max nominal power from node %v: No values found. Assigning a nominal power of 10 kW.", node.Name)
+			nominalMax = "10000"
 		}
 
-		// split string into slice with single values
-		shares := strings.Split(shares_string, ";")
-		var shares_float []float64
+		// append nominal power
+		nmf64, _ := strconv.ParseFloat(nominalMax, 64)
+		energyData = append(energyData, float64(nmf64))
 
-		// convert strings to floats
+		sharesString := node.Annotations["renewable"]
+		if sharesString == "" {
+			log.Printf("Error parsing renewable share from node %v: No values found. Assigning a renewable energy share of 0.", node.Name)
+			sharesString = "0.0;0.0;0.0;0.0;0.0"
+		}
+
+		// split renewable string into slice with single values
+		shares := strings.Split(sharesString, ";")
+		// convert strings to floats and append to data
 		for i := 0; i < len(shares); i += 1 {
 			f64, _ := strconv.ParseFloat(shares[i], 64)
-			shares_float = append(shares_float, float64(f64))
+			energyData = append(energyData, float64(f64))
 		}
 
 		// Logs for Debugging
-		log.Printf("Renewable shares parsed from Node %v: %v", node.Name, shares_float)
+		log.Printf("Nominal Power and Renewable shares parsed from Node %v: %v", node.Name, energyData)
 
-		renewables[node.Name] = shares_float
+		nodeEnergyData[node.Name] = energyData
 	}
 
-	return renewables
+	return nodeEnergyData
 }
 
 func sum(slice []float64) float64 {
@@ -133,6 +148,55 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 	return normalizedScores
 }
 
+func calculateRenewableSurpas(energyData map[string][]float64, currentUtilization map[string]float64) map[string][]float64 {
+
+	// calculate unused renewable energy capacity on nodes
+
+	// renewable energy % - utilization % = surpas renewable energy %
+	return nil
+
+}
+
+func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
+
+	nodeUtilization := make(map[string]float64)
+	var kubeconfig, master string //empty, assuming inClusterConfig
+
+	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
+	if err != nil {
+		panic(err)
+	}
+	log.Print("Nevermind, it worked!")
+
+	mc, err := metrics.NewForConfig(config)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, node := range nodeList.Items {
+
+		// get node metrics from metrics server
+		nodeMetricsList, err := mc.MetricsV1beta1().NodeMetricses().Get(context.TODO(), node.Name, metav1.GetOptions{})
+		if err != nil {
+			panic(err)
+		}
+
+		// get total allocatable CPU from node status
+		cpuallocatable, _ := strconv.ParseFloat(node.Status.Allocatable.Cpu().String(), 64)
+
+		// get current CPU utilization from node metrics
+		cpucurrentusage, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
+
+		var totalUtilization = math.Round((cpucurrentusage/cpuallocatable)*100) / 100
+
+		log.Printf("Node %s has a total CPU utilization of %v", node.Name, totalUtilization)
+		nodeUtilization[node.Name] = totalUtilization
+	}
+
+	return nodeUtilization
+
+}
+
 func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
 	// default
@@ -145,8 +209,10 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
 	log.Printf("Scheduling mode %v with a weight constant of %v", mode, weight)
 
-	var nodeShares = parseRenewablesFromNodes(nodeList)
-	var nodeScores = calculateRenewableScores(nodeShares)
+	var energyData = parseDataFromNodes(nodeList)
+	var currentUtilization = calculateCpuUtilization(nodeList)
+	var renewableSurpas = calculateRenewableSurpas(energyData, currentUtilization)
+	var nodeScores = calculateRenewableScores(renewableSurpas)
 	var weightedTotalScores = weightScores(nodeScores, mode, weight)
 
 	// Logs for Debugging
