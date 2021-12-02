@@ -150,11 +150,32 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 
 func calculateRenewableSurpas(energyData map[string][]float64, currentUtilization map[string]float64) map[string][]float64 {
 
-	// calculate unused renewable energy capacity on nodes
+	renewablesSurpas := make(map[string][]float64)
 
-	// renewable energy % - utilization % = surpas renewable energy %
-	return nil
+	for node := range energyData {
+		var maxInput float64
+		maxInput, energyData[node] = energyData[node][0], energyData[node][1:]
+		var currentNodeUtilization = currentUtilization[node]
+		var currentInput = maxInput * currentNodeUtilization
+		var nodeRenewableSurpas []float64
 
+		log.Printf("Node %v with max input of %v and current utilization of %v has a current input of %v", node, maxInput, currentNodeUtilization, currentInput)
+
+		for _, renewableShare := range energyData[node] {
+			renewableShare -= currentInput
+
+			if renewableShare > 0 {
+				nodeRenewableSurpas = append(nodeRenewableSurpas, renewableShare)
+			} else {
+				nodeRenewableSurpas = append(nodeRenewableSurpas, 0)
+			}
+		}
+
+		renewablesSurpas[node] = nodeRenewableSurpas
+
+	}
+
+	return renewablesSurpas
 }
 
 func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
@@ -182,12 +203,12 @@ func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
 		}
 
 		// get total allocatable CPU from node status
-		cpuallocatable, _ := strconv.ParseFloat(node.Status.Allocatable.Cpu().String(), 64)
+		cpuAllocatable, _ := strconv.ParseFloat(node.Status.Allocatable.Cpu().String(), 64)
 
 		// get current CPU utilization from node metrics
-		cpucurrentusage, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
+		cpuCurrentUsage, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
 
-		var totalUtilization = math.Round((cpucurrentusage/cpuallocatable)*100) / 100
+		var totalUtilization = math.Round((cpuCurrentUsage/cpuAllocatable)*100) / 100
 
 		log.Printf("Node %s has a total CPU utilization of %v", node.Name, totalUtilization)
 		nodeUtilization[node.Name] = totalUtilization
