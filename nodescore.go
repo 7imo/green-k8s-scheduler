@@ -149,14 +149,14 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 	return normalizedScores
 }
 
-func calculateRenewableSurpas(energyData map[string][]float64, currentUtilization map[string]float64) map[string][]float64 {
+func calculateRenewableExcess(energyData map[string][]float64, currentUtilization map[string]float64) map[string][]float64 {
 
-	renewablesSurpas := make(map[string][]float64)
+	renewablesExcess := make(map[string][]float64)
 
 	for node := range energyData {
 
 		var maxInput float64
-		var nodeRenewableSurpas []float64
+		var nodeRenewableExcess []float64
 		var currentNodeUtilization = currentUtilization[node]
 		var currentInput = maxInput * currentNodeUtilization
 
@@ -165,23 +165,23 @@ func calculateRenewableSurpas(energyData map[string][]float64, currentUtilizatio
 
 		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current input of %v W", node, maxInput, currentNodeUtilization*10, currentInput)
 
-		// calculate renewable energy surpas for current node utilization
+		// calculate renewable energy excess for current node utilization
 		for _, renewableShare := range energyData[node] {
 			renewableShare -= currentInput
 
 			if renewableShare > 0 {
-				nodeRenewableSurpas = append(nodeRenewableSurpas, renewableShare)
+				nodeRenewableExcess = append(nodeRenewableExcess, renewableShare)
 			} else {
-				nodeRenewableSurpas = append(nodeRenewableSurpas, 0)
+				nodeRenewableExcess = append(nodeRenewableExcess, 0)
 			}
 		}
 
-		log.Printf("Node %v has a surpas renewable energy share of: %v ", node, nodeRenewableSurpas)
+		log.Printf("Node %v has an excess renewable energy share of: %v ", node, nodeRenewableExcess)
 
-		renewablesSurpas[node] = nodeRenewableSurpas
+		renewablesExcess[node] = nodeRenewableExcess
 	}
 
-	return renewablesSurpas
+	return renewablesExcess
 }
 
 func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
@@ -237,8 +237,8 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
 	var energyData = parseDataFromNodes(nodeList)
 	var currentUtilization = calculateCpuUtilization(nodeList)
-	var renewableSurpas = calculateRenewableSurpas(energyData, currentUtilization)
-	var nodeScores = calculateRenewableScores(renewableSurpas)
+	var renewableExcess = calculateRenewableExcess(energyData, currentUtilization)
+	var nodeScores = calculateRenewableScores(renewableExcess)
 	var weightedTotalScores = weightScores(nodeScores, mode, weight)
 
 	for key, value := range weightedTotalScores {
