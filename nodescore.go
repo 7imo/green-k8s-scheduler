@@ -25,10 +25,11 @@ var weight = os.Getenv("WEIGHT")
 func parseDataFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 
 	nodeEnergyData := make(map[string][]float64)
-	var energyData []float64
 
 	// read renewable shares from node annotations
 	for _, node := range nodeList.Items {
+
+		var energyData []float64
 
 		nominalMax := node.Annotations["nominal_power"]
 		if nominalMax == "" {
@@ -153,14 +154,18 @@ func calculateRenewableSurpas(energyData map[string][]float64, currentUtilizatio
 	renewablesSurpas := make(map[string][]float64)
 
 	for node := range energyData {
+
 		var maxInput float64
-		maxInput, energyData[node] = energyData[node][0], energyData[node][1:]
+		var nodeRenewableSurpas []float64
 		var currentNodeUtilization = currentUtilization[node]
 		var currentInput = maxInput * currentNodeUtilization
-		var nodeRenewableSurpas []float64
 
-		log.Printf("Node %v with max input of %v and current utilization of %v has a current input of %v", node, maxInput, currentNodeUtilization, currentInput)
+		// split nominal power and renewable shares
+		maxInput, energyData[node] = energyData[node][0], energyData[node][1:]
 
+		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current input of %v W", node, maxInput, currentNodeUtilization*10, currentInput)
+
+		// calculate renewable energy surpas for current node utilization
 		for _, renewableShare := range energyData[node] {
 			renewableShare -= currentInput
 
@@ -171,8 +176,9 @@ func calculateRenewableSurpas(energyData map[string][]float64, currentUtilizatio
 			}
 		}
 
-		renewablesSurpas[node] = nodeRenewableSurpas
+		log.Printf("Node %v has a surpas renewable energy share of: %v ", node, nodeRenewableSurpas)
 
+		renewablesSurpas[node] = nodeRenewableSurpas
 	}
 
 	return renewablesSurpas
@@ -183,11 +189,11 @@ func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
 	nodeUtilization := make(map[string]float64)
 	var kubeconfig, master string //empty, assuming inClusterConfig
 
+	// initiate connection to metrics server
 	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
 	if err != nil {
 		panic(err)
 	}
-	log.Print("Nevermind, it worked!")
 
 	mc, err := metrics.NewForConfig(config)
 	if err != nil {
@@ -203,19 +209,18 @@ func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
 		}
 
 		// get total allocatable CPU from node status
-		cpuAllocatable, _ := strconv.ParseFloat(node.Status.Allocatable.Cpu().String(), 64)
+		cpuAllocatableCores, _ := strconv.ParseFloat(node.Status.Allocatable.Cpu().String(), 64)
+		var cpuAllocatableNanoCores = cpuAllocatableCores * math.Pow(10, 9)
 
 		// get current CPU utilization from node metrics
-		cpuCurrentUsage, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
+		cpuCurrentUsageNanoCores, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
 
-		var totalUtilization = math.Round((cpuCurrentUsage/cpuAllocatable)*100) / 100
+		var totalUtilization = math.Round(cpuCurrentUsageNanoCores/cpuAllocatableNanoCores*100) / 100
 
-		log.Printf("Node %s has a total CPU utilization of %v", node.Name, totalUtilization)
 		nodeUtilization[node.Name] = totalUtilization
 	}
 
 	return nodeUtilization
-
 }
 
 func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
@@ -228,7 +233,7 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 		weight = "0.75"
 	}
 
-	log.Printf("Scheduling mode %v with a weight constant of %v", mode, weight)
+	log.Printf("Scheduling mode %v with a weight distribution constant of %v", mode, weight)
 
 	var energyData = parseDataFromNodes(nodeList)
 	var currentUtilization = calculateCpuUtilization(nodeList)
@@ -236,7 +241,6 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 	var nodeScores = calculateRenewableScores(renewableSurpas)
 	var weightedTotalScores = weightScores(nodeScores, mode, weight)
 
-	// Logs for Debugging
 	for key, value := range weightedTotalScores {
 		log.Printf("Total weighted score calculated for Node %v: %v", key, value)
 	}

@@ -49,11 +49,7 @@ data:
     "kind" : "Policy",
     "apiVersion" : "v1",
     "predicates" : [
-      {"name" : "PodFitsHostPorts"},
-      {"name" : "PodFitsResources"},
-      {"name" : "NoDiskConflict"},
-      {"name" : "MatchNodeSelector"},
-      {"name" : "HostName"}
+      {"name" : "MatchNodeSelector"}
     ],
     "priorities" : [
     ],
