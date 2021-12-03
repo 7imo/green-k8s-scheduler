@@ -23,3 +23,22 @@
     }],
     "hardPodAffinitySymmetricWeight" : 10
   }
+
+
+
+  	config, err := rest.InClusterConfig()
+	if err != nil {
+		panic(err.Error())
+	}
+	// creates the clientset
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	data, err := clientset.RESTClient().Get().AbsPath("http://172.20.59.208:10255/metrics/resource/v1alpha1").DoRaw(context.TODO())
+	if err != nil {
+		panic(err.Error())
+	}
+
+	log.Print(string(data))

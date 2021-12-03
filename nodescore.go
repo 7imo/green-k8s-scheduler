@@ -176,7 +176,7 @@ func calculateRenewableExcess(energyData map[string][]float64, currentUtilizatio
 			}
 		}
 
-		log.Printf("Node %v has an excess renewable energy share of: %v ", node, nodeRenewableExcess)
+		log.Printf("Node %v has an renewable energy excess share of: %v ", node, nodeRenewableExcess)
 
 		renewablesExcess[node] = nodeRenewableExcess
 	}
