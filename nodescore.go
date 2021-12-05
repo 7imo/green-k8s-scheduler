@@ -137,7 +137,7 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 		// calculate normalized score for each share per node
 		for node, shares := range nodeShares {
 			normalizedScore = shares[currentShare] * MAX_SCORE / highest
-			normalizedScores[node] = append(normalizedScores[node], normalizedScore)
+			normalizedScores[node] = append(normalizedScores[node], roundToTwoDecimals(normalizedScore))
 		}
 	}
 
@@ -158,16 +158,18 @@ func calculateRenewableExcess(energyData map[string][]float64, currentUtilizatio
 		var maxInput float64
 		var nodeRenewableExcess []float64
 		var currentNodeUtilization = currentUtilization[node]
-		var currentInput = maxInput * currentNodeUtilization
 
 		// split nominal power and renewable shares
 		maxInput, energyData[node] = energyData[node][0], energyData[node][1:]
 
-		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current input of %v W", node, maxInput, currentNodeUtilization*10, currentInput)
+		// calculate consumption and round to two decimal places
+		var currentInput = roundToTwoDecimals(maxInput * currentNodeUtilization)
+
+		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current consumption of %v W", node, maxInput, math.Round(currentNodeUtilization*1000)/10, currentInput)
 
 		// calculate renewable energy excess for current node utilization
 		for _, renewableShare := range energyData[node] {
-			renewableShare -= currentInput
+			renewableShare = roundToTwoDecimals(renewableShare - currentInput)
 
 			if renewableShare > 0 {
 				nodeRenewableExcess = append(nodeRenewableExcess, renewableShare)
@@ -176,12 +178,16 @@ func calculateRenewableExcess(energyData map[string][]float64, currentUtilizatio
 			}
 		}
 
-		log.Printf("Node %v has an renewable energy excess share of: %v ", node, nodeRenewableExcess)
+		log.Printf("Node %v has a renewable energy excess share of: %v ", node, nodeRenewableExcess)
 
 		renewablesExcess[node] = nodeRenewableExcess
 	}
 
 	return renewablesExcess
+}
+
+func roundToTwoDecimals(input float64) float64 {
+	return math.Round(input*100) / 100
 }
 
 func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
@@ -215,7 +221,7 @@ func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
 		// get current CPU utilization from node metrics
 		cpuCurrentUsageNanoCores, _ := strconv.ParseFloat(strings.TrimSuffix(nodeMetricsList.Usage.Cpu().String(), "n"), 64)
 
-		var totalUtilization = math.Round(cpuCurrentUsageNanoCores/cpuAllocatableNanoCores*100) / 100
+		var totalUtilization = cpuCurrentUsageNanoCores / cpuAllocatableNanoCores
 
 		nodeUtilization[node.Name] = totalUtilization
 	}
