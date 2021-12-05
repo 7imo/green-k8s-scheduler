@@ -42,3 +42,5 @@
 	}
 
 	log.Print(string(data))
+
+    api.ha.greenk8s.com,34.200.233.85 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBKXAI8rTcR+dSmJQAy6jc67lXkxVmQbZ4l2q8vIK22nhU//Gitn6gm/1Sf2lBjcMQzF35tnMOwSXMZ5wfOf$

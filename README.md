@@ -91,7 +91,7 @@ kops create cluster \
     --node-count=3 \
     --master-count=1 \
     --master-size=t2.medium \
-    --node-size=t2.medium \
+    --node-size=t2.small \
     --zones="us-east-1a" \
     --cloud-labels="purpose=thesis" \
     ${NAME}
@@ -130,6 +130,7 @@ https://serverfault.com/questions/993888/kubernetes-with-kops-in-aws-how-to-atta
 For kubectl error: You must be logged in to the server (Unauthorized) set state store env variable and export kubecfg:
 ```
 kops export kubecfg --admin 
+kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes
 ```
 
 ## Deploy Scheduler Extension
