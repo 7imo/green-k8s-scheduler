@@ -118,6 +118,13 @@ ssh -i ~/.ssh/id_rsa ubuntu@api.ha.greenk8s.com
 kubectl get nodes -o wide
 ```
 
+#####  run metrics-server
+```
+kubectl apply -f manifests/metrics-server.yaml
+kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes
+kubectl top nodes
+```
+
 #####  delete cluster
 ```
 kops delete cluster --name ${NAME} --yes
@@ -130,7 +137,6 @@ https://serverfault.com/questions/993888/kubernetes-with-kops-in-aws-how-to-atta
 For kubectl error: You must be logged in to the server (Unauthorized) set state store env variable and export kubecfg:
 ```
 kops export kubecfg --admin 
-kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes
 ```
 
 ## Deploy Scheduler Extension
@@ -144,7 +150,7 @@ docker push "${IMAGE}"
 
 #####  Run extender image
 ```
-kubectl apply -f scheduler.yaml
+kubectl apply -f manifests/scheduler.yaml
 ```
 
 #####  Check if pod was created:
@@ -166,7 +172,6 @@ kubectl apply -f Deployment.yaml
 #####  Troubleshooting: 
 ```
 kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
-
 kubectl logs green-k8s-descheduler-56d745498f-km96r -n kube-system -p
 kubectl describe pods green-k8s-scheduler-584f5649b8-4dgxv  -n kube-system
 kubectl logs -f green-k8s-scheduler-584f5649b8-4dgxv -c green-k8s-scheduler-extender-ctr -p
@@ -174,67 +179,14 @@ kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler -f
 kubectl get deployment green-k8s-descheduler --namespace=kube-system
 kubectl delete deployment green-k8s-descheduler -n kube-system
 ```
+
 # Manual annotation / labeling
 ```
-kubectl label nodes ip-172-20-90-143.ec2.internal green=true
-kubectl get nodes --show-labels
 kubectl annotate nodes <your-node-name> renewable=0.6
 ```
 
-# Manual tainting
-
-kubectl taint nodes ip-172-20-88-199.ec2.internal green=false:NoSchedule-
-kubectl taint nodes ip-172-20-88-199.ec2.internal green=false:NoExecute-
-
-Liveliness Probe?
-
-# Samples
-https://developer.ibm.com/articles/creating-a-custom-kube-scheduler/
-https://github.com/everpeace/k8s-scheduler-extender-example
-
-
-
-## Install Prometheus/Grafana Monitoring
-https://computingforgeeks.com/setup-prometheus-and-grafana-on-kubernetes/
-
-##### forward prometheus dashboard port http://localhost:9090
-```
-kubectl port-forward -n monitoring prometheus-green-k8s-monitor-kube-pro-prometheus-0 9090
-```
-##### forward grafana dashboard port http://localhost:3000
-```
-kubectl port-forward green-k8s-monitor-grafana-6dc6596dff-xmhcl 3000 -n monitoring
-```
-configure using localhost:9090 and "browser"
-
-
-https://serverfault.com/questions/1042202/how-can-i-measure-pod-startup-time-in-kubernetes
-https://www.youtube.com/watch?v=q8MFm2jwXpA
-
-## Run the Electricity Simulator
-
-##### Troubleshooting
+### aob
 https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
 https://deepdive.tw/2017/01/04/installing-kubernetes-on-aws-with-kops/
-
-
-## Taint nodes
-kubectl taint
-
-http://doc.forecast.solar/doku.php?id=api:estimate
-
-## Create Dashboard
-
-https://github.com/kubernetes/dashboard
-
-
-### aob
 https://stackoverflow.com/questions/62803041/how-to-evict-or-delete-pods-from-kubernetes-using-golang-client
-https://stackoverflow.com/questions/53857593/how-to-get-status-of-a-pod-in-kubernetes-using-go-client
 https://math.stackexchange.com/questions/684519/what-is-the-most-scientific-way-to-assign-weights-to-historical-data/684629
-
-### metrics 
-https://stackoverflow.com/questions/52763291/get-current-resource-usage-of-a-pod-in-kubernetes-with-go-client
-https://stackoverflow.com/questions/52029656/how-to-retrieve-kubernetes-metrics-via-client-go-and-golang
-https://www.datadoghq.com/blog/how-to-collect-and-graph-kubernetes-metrics/
-https://thecloudblog.net/lab/practical-top-down-resource-monitoring-of-a-kubernetes-cluster-with-metrics-server/

@@ -1,0 +1,180 @@
+2021/12/07 13:36:09 Calculating node priorities for pod green-k8s-test-688d6758c6-ck9dt ...
+2021/12/07 13:36:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:36:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1241.7 2406 2632.8 1100.4 795.5]
+2021/12/07 13:36:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2546.5 2656.3 1976.6 855.5 2555.2]
+2021/12/07 13:36:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 3002.4 2021.1 661.6 325.5 3463.1]
+W1207 13:36:09.636488       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:36:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 1.5 % has a current consumption of 151.31 W
+2021/12/07 13:36:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [1090.39 2254.69 2481.49 949.09 644.19] 
+2021/12/07 13:36:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 1.4 % has a current consumption of 142.36 W
+2021/12/07 13:36:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [2404.14 2513.94 1834.24 713.14 2412.84] 
+2021/12/07 13:36:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 2.6 % has a current consumption of 260.83 W
+2021/12/07 13:36:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [2741.57 1760.27 400.77 64.67 3202.27] 
+2021/12/07 13:36:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [8.77 10 7.39 7.51 7.53]
+2021/12/07 13:36:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [10 7 1.62 0.68 10]
+2021/12/07 13:36:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [3.98 8.97 10 10 2.01]
+2021/12/07 13:36:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 7
+2021/12/07 13:36:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 10
+2021/12/07 13:36:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 9
+2021/12/07 13:40:10 Calculating node priorities for pod green-k8s-test-688d6758c6-s9nxt ...
+2021/12/07 13:40:10 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:40:10 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1568.9 2542.2 2604.2 1080 784.9]
+2021/12/07 13:40:10 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2482.6 2597.8 1895.3 838.7 2545]
+2021/12/07 13:40:10 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2568.7 1787.5 554.6 317.8 3456.7]
+W1207 13:40:10.036825       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:40:10 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 1.5 % has a current consumption of 153.1 W
+2021/12/07 13:40:10 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [2415.6 1634.4 401.5 164.7 3303.6] 
+2021/12/07 13:40:10 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 1.5 % has a current consumption of 151.82 W
+2021/12/07 13:40:10 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [1417.08 2390.38 2452.38 928.18 633.08] 
+2021/12/07 13:40:10 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 21.3 % has a current consumption of 2127.12 W
+2021/12/07 13:40:10 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [355.48 470.68 0 0 417.88] 
+2021/12/07 13:40:10 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [10 6.84 1.64 1.77 10]
+2021/12/07 13:40:10 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [5.87 10 10 10 1.92]
+2021/12/07 13:40:10 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [1.47 1.97 0 0 1.26]
+2021/12/07 13:40:10 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 10
+2021/12/07 13:40:10 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 10
+2021/12/07 13:40:10 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 2
+2021/12/07 13:44:09 Calculating node priorities for pod green-k8s-test-688d6758c6-nnp7s ...
+2021/12/07 13:44:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:44:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1568.9 2542.2 2604.2 1080 784.9]
+2021/12/07 13:44:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2482.6 2597.8 1895.3 838.7 2545]
+2021/12/07 13:44:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2568.7 1787.5 554.6 317.8 3456.7]
+W1207 13:44:09.429841       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:44:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 1.3 % has a current consumption of 133.39 W
+2021/12/07 13:44:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [1435.51 2408.81 2470.81 946.61 651.51] 
+2021/12/07 13:44:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 21.4 % has a current consumption of 2142.34 W
+2021/12/07 13:44:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [340.26 455.46 0 0 402.66] 
+2021/12/07 13:44:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 21.5 % has a current consumption of 2154.03 W
+2021/12/07 13:44:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [414.67 0 0 0 1302.67] 
+2021/12/07 13:44:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [10 10 10 10 5]
+2021/12/07 13:44:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [2.37 1.89 0 0 3.09]
+2021/12/07 13:44:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [2.89 0 0 0 10]
+2021/12/07 13:44:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 2
+2021/12/07 13:44:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 2
+2021/12/07 13:44:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 10
+2021/12/07 13:48:09 Calculating node priorities for pod green-k8s-test-688d6758c6-v5cl5 ...
+2021/12/07 13:48:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:48:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1568.9 2542.2 2604.2 1080 784.9]
+2021/12/07 13:48:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2482.6 2597.8 1895.3 838.7 2545]
+2021/12/07 13:48:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2568.7 1787.5 554.6 317.8 3456.7]
+W1207 13:48:09.243641       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:48:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 21.5 % has a current consumption of 2145.83 W
+2021/12/07 13:48:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 396.37 458.37 0 0] 
+2021/12/07 13:48:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 21.4 % has a current consumption of 2140.32 W
+2021/12/07 13:48:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [342.28 457.48 0 0 404.68] 
+2021/12/07 13:48:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 21.6 % has a current consumption of 2161.59 W
+2021/12/07 13:48:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [407.11 0 0 0 1295.11] 
+2021/12/07 13:48:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [10 0 0 0 10]
+2021/12/07 13:48:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 8.66 10 0 0]
+2021/12/07 13:48:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [8.41 10 0 0 3.12]
+2021/12/07 13:48:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 10
+2021/12/07 13:48:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 8
+2021/12/07 13:48:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 5
+2021/12/07 13:52:11 Calculating node priorities for pod green-k8s-test-688d6758c6-ts4cx ...
+2021/12/07 13:52:11 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:52:11 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 3251.8 2424.4 2520.4 1036.3 762.7]
+2021/12/07 13:52:11 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 3412.3 2378.7 1784.1 811.3 2527.4]
+2021/12/07 13:52:11 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2435.3 1540.1 453.1 315.8 3449.7]
+W1207 13:52:11.017801       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:52:11 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 21.4 % has a current consumption of 2141.43 W
+2021/12/07 13:52:11 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [1110.37 282.97 378.97 0 0] 
+2021/12/07 13:52:11 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 41.3 % has a current consumption of 4127.58 W
+2021/12/07 13:52:11 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 13:52:11 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 21.4 % has a current consumption of 2140.12 W
+2021/12/07 13:52:11 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [295.18 0 0 0 1309.58] 
+2021/12/07 13:52:11 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 13:52:11 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [2.66 0 0 0 10]
+2021/12/07 13:52:11 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [10 10 10 0 0]
+2021/12/07 13:52:11 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 10
+2021/12/07 13:52:11 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 13:52:11 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 2
+2021/12/07 13:56:09 Calculating node priorities for pod green-k8s-test-688d6758c6-9kmpc ...
+2021/12/07 13:56:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 13:56:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 3251.8 2424.4 2520.4 1036.3 762.7]
+2021/12/07 13:56:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 3412.3 2378.7 1784.1 811.3 2527.4]
+2021/12/07 13:56:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2435.3 1540.1 453.1 315.8 3449.7]
+W1207 13:56:09.572229       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 13:56:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 37.2 % has a current consumption of 3721.44 W
+2021/12/07 13:56:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 13:56:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 41.2 % has a current consumption of 4118.86 W
+2021/12/07 13:56:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 13:56:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 21.6 % has a current consumption of 2158.85 W
+2021/12/07 13:56:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [276.45 0 0 0 1290.85] 
+2021/12/07 13:56:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 0 0 0 0]
+2021/12/07 13:56:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 13:56:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [10 0 0 0 10]
+2021/12/07 13:56:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 0
+2021/12/07 13:56:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 13:56:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 10
+2021/12/07 14:00:09 Calculating node priorities for pod green-k8s-test-688d6758c6-6hf66 ...
+2021/12/07 14:00:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 14:00:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1454.1 2579.8 2515.9 1020.2 753.5]
+2021/12/07 14:00:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2163.5 2330.2 1727.6 804.9 2517]
+2021/12/07 14:00:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2151.7 1303.8 363.5 321.3 3441.5]
+W1207 14:00:09.386632       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 14:00:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 37.7 % has a current consumption of 3767.22 W
+2021/12/07 14:00:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:00:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 41.2 % has a current consumption of 4124.12 W
+2021/12/07 14:00:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:00:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 41.4 % has a current consumption of 4140.91 W
+2021/12/07 14:00:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:00:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:00:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:00:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:00:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 14:00:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 0
+2021/12/07 14:00:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 0
+2021/12/07 14:04:12 Calculating node priorities for pod green-k8s-test-688d6758c6-hwjhv ...
+2021/12/07 14:04:12 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 14:04:12 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1454.1 2579.8 2515.9 1020.2 753.5]
+2021/12/07 14:04:12 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2163.5 2330.2 1727.6 804.9 2517]
+2021/12/07 14:04:12 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2151.7 1303.8 363.5 321.3 3441.5]
+W1207 14:04:12.136956       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 14:04:12 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 46.2 % has a current consumption of 4617.62 W
+2021/12/07 14:04:12 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:04:12 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 41.2 % has a current consumption of 4118.64 W
+2021/12/07 14:04:12 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:04:12 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 41.4 % has a current consumption of 4137.22 W
+2021/12/07 14:04:12 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:04:12 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:04:12 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:04:12 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:04:12 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 0
+2021/12/07 14:04:12 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 0
+2021/12/07 14:04:12 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 14:08:09 Calculating node priorities for pod green-k8s-test-688d6758c6-w7ggg ...
+2021/12/07 14:08:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 14:08:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 1454.1 2579.8 2515.9 1020.2 753.5]
+2021/12/07 14:08:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2163.5 2330.2 1727.6 804.9 2517]
+2021/12/07 14:08:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 2151.7 1303.8 363.5 321.3 3441.5]
+W1207 14:08:09.654587       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 14:08:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 46.5 % has a current consumption of 4654.47 W
+2021/12/07 14:08:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:08:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 41.1 % has a current consumption of 4113.53 W
+2021/12/07 14:08:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:08:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 61.6 % has a current consumption of 6160.14 W
+2021/12/07 14:08:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:08:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:08:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:08:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:08:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 14:08:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 0
+2021/12/07 14:08:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 0
+2021/12/07 14:12:09 Calculating node priorities for pod green-k8s-test-688d6758c6-n5snf ...
+2021/12/07 14:12:09 Scheduling mode favor-present with a weight distribution constant of 0.5
+2021/12/07 14:12:09 Nominal Power and Renewable shares parsed from Node ip-172-20-54-144.ec2.internal: [10000 3064.2 2441.4 2402.3 981.8 732.6]
+2021/12/07 14:12:09 Nominal Power and Renewable shares parsed from Node ip-172-20-57-14.ec2.internal: [10000 2979.4 2108.7 1612 789.7 2500.3]
+2021/12/07 14:12:09 Nominal Power and Renewable shares parsed from Node ip-172-20-56-242.ec2.internal: [10000 1901.5 1073.1 284.3 334.3 3434.5]
+W1207 14:12:09.610997       1 client_config.go:615] Neither --kubeconfig nor --master was specified.  Using the inClusterConfig.  This might not work.
+2021/12/07 14:12:09 Node ip-172-20-54-144.ec2.internal with max input of 10000 W and current utilization of 46.8 % has a current consumption of 4683.73 W
+2021/12/07 14:12:09 Node ip-172-20-54-144.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:12:09 Node ip-172-20-57-14.ec2.internal with max input of 10000 W and current utilization of 46.1 % has a current consumption of 4612.27 W
+2021/12/07 14:12:09 Node ip-172-20-57-14.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:12:09 Node ip-172-20-56-242.ec2.internal with max input of 10000 W and current utilization of 61.3 % has a current consumption of 6127.79 W
+2021/12/07 14:12:09 Node ip-172-20-56-242.ec2.internal has a renewable energy excess share of: [0 0 0 0 0] 
+2021/12/07 14:12:09 Renewable share scores calculated for Node ip-172-20-54-144.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:12:09 Renewable share scores calculated for Node ip-172-20-57-14.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:12:09 Renewable share scores calculated for Node ip-172-20-56-242.ec2.internal: [0 0 0 0 0]
+2021/12/07 14:12:09 Total weighted score calculated for Node ip-172-20-54-144.ec2.internal: 0
+2021/12/07 14:12:09 Total weighted score calculated for Node ip-172-20-57-14.ec2.internal: 0
+2021/12/07 14:12:09 Total weighted score calculated for Node ip-172-20-56-242.ec2.internal: 0
