@@ -103,8 +103,8 @@ func weightScores(nodeScores map[string][]float64, mode string, weight string) m
 	}
 
 	// favor-present is default
-	if mode != "favor-future" {
-		sort.Sort(sort.Reverse(sort.Float64Slice(weights)))
+	if mode == "favor-future" {
+		sort.Float64s(weights)
 	}
 
 	for node, scores := range nodeScores {
