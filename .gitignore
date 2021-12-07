@@ -5,6 +5,9 @@
 *.so
 *.dylib
 
+# IPYNB
+*.ipynb
+
 # Test binary, built with `go test -c`
 *.test
 
