@@ -127,16 +127,18 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 	for currentShare := 0; currentShare < 5; currentShare++ {
 
 		highest := 1.0
+		lowest := 0.0
 		var normalizedScore float64
 
 		// find highest of current shares
 		for node, _ := range nodeShares {
 			highest = math.Max(highest, nodeShares[node][currentShare])
+			lowest = math.Min(lowest, nodeShares[node][currentShare])
 		}
 
-		// calculate normalized score for each share per node
+		// calculate normalized score for each excess / deficit share per node
 		for node, shares := range nodeShares {
-			normalizedScore = shares[currentShare] * MAX_SCORE / highest
+			normalizedScore = ((shares[currentShare] - lowest) / (highest - lowest)) * MAX_SCORE
 			normalizedScores[node] = append(normalizedScores[node], roundToTwoDecimals(normalizedScore))
 		}
 	}
@@ -169,13 +171,7 @@ func calculateRenewableExcess(energyData map[string][]float64, currentUtilizatio
 
 		// calculate renewable energy excess for current node utilization
 		for _, renewableShare := range energyData[node] {
-			renewableShare = roundToTwoDecimals(renewableShare - currentInput)
-
-			if renewableShare > 0 {
-				nodeRenewableExcess = append(nodeRenewableExcess, renewableShare)
-			} else {
-				nodeRenewableExcess = append(nodeRenewableExcess, 0)
-			}
+			nodeRenewableExcess = append(nodeRenewableExcess, roundToTwoDecimals(renewableShare-currentInput))
 		}
 
 		log.Printf("Node %v has a renewable energy excess share of: %v ", node, nodeRenewableExcess)
