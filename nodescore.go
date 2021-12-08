@@ -131,7 +131,7 @@ func calculateRenewableScores(nodeShares map[string][]float64) map[string][]floa
 		var normalizedScore float64
 
 		// find highest of current shares
-		for node, _ := range nodeShares {
+		for node := range nodeShares {
 			highest = math.Max(highest, nodeShares[node][currentShare])
 			lowest = math.Min(lowest, nodeShares[node][currentShare])
 		}
