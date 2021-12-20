@@ -88,7 +88,7 @@ export KOPS_STATE_STORE=s3://greenk8s-ha-state-store
 #####  create cluster
 ```
 kops create cluster \
-    --node-count=3 \
+    --node-count=4 \
     --master-count=1 \
     --master-size=t2.medium \
     --node-size=t2.small \
@@ -111,6 +111,9 @@ kubectl get nodes
 #####  test ssh into master node (in Case connection fails: https://www.thegeekdiary.com/how-to-fix-the-error-host-key-verification-failed/)
 ```
 ssh -i ~/.ssh/id_rsa ubuntu@api.ha.greenk8s.com
+kube-scheduler config: /etc/kubernetes/manifests
+kube-scheduler logs: /var/log/kube-scheduler.log
+sudo grep -i 'score' kube-scheduler.log
 ```
 
 #####  check nodes and pods
@@ -162,6 +165,8 @@ kubectl get pods -n kube-system
 #####  Stream Logs for troubleshooting:
 ```
 kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-extender-ctr -f
+
+kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-ctr -f | grep -i 'score'
 ```
 
 #####  Deploy test pods:

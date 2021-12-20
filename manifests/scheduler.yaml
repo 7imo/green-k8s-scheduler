@@ -49,9 +49,18 @@ data:
     "kind" : "Policy",
     "apiVersion" : "v1",
     "predicates" : [
-      {"name" : "MatchNodeSelector"}
+      {"name" : "PodFitsHostPorts"},
+      {"name" : "PodFitsResources"},
+      {"name" : "NoDiskConflict"},
+      {"name" : "MatchNodeSelector"},
+      {"name" : "HostName"}
     ],
     "priorities" : [
+      {"name" : "LeastRequestedPriority", "weight" : 1},
+      {"name" : "BalancedResourceAllocation", "weight" : 1},
+      {"name" : "ServiceSpreadingPriority", "weight" : 1},
+      {"name" : "ImageLocalityPriority", "weight" : 1},
+      {"name" : "EqualPriority", "weight" : 1}
     ],
     "extenders" : [{
       "urlPrefix": "http://localhost:80",
@@ -99,7 +108,7 @@ spec:
         args:
         - kube-scheduler
         - --config=/green-k8s-scheduler/config.yaml
-        - -v=4
+        - -v=10
         volumeMounts:
         - name: green-k8s-scheduler-config
           mountPath: /green-k8s-scheduler
@@ -118,9 +127,5 @@ spec:
           - containerPort: 80
         env:
         - name: MODE
-          # determines which periods are given greater weight
-          value: "favor-present" # favor-present for short running apps, favor-future for long-running apps
-        - name: WEIGHT
-          # float between 0 and 1: smaller = steeply sloping weights; bigger = more even weights
-          value: "0.5"
-          # 0.75 results in weights: [10min: 4; 1h: 3; 4h: 2.25; 12h: 1.6875; 24h: 1.265625] 
+          # allows the user to adjust the scheduler to the runtime of the apps to be scheduled
+          value: "M" # xs, s, m, l, xl - default is xs

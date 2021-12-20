@@ -17,12 +17,12 @@ import (
 )
 
 const MAX_SCORE = 10.0
+const RATED_POWER_NODE = 10000
 
 // reads envs from deployment
-var mode = os.Getenv("MODE")
-var weight = os.Getenv("WEIGHT")
+var mode = strings.ToLower(os.Getenv("MODE"))
 
-func parseDataFromNodes(nodeList *v1.NodeList) map[string][]float64 {
+func parseDataFromNodes(nodeList *v1.NodeList, windowSize int) map[string][]float64 {
 
 	nodeEnergyData := make(map[string][]float64)
 
@@ -31,33 +31,24 @@ func parseDataFromNodes(nodeList *v1.NodeList) map[string][]float64 {
 
 		var energyData []float64
 
-		nominalMax := node.Annotations["nominal_power"]
-		if nominalMax == "" {
-			// this value is known in real setups
-			log.Printf("Error parsing max nominal power from node %v: No values found. Assigning a nominal power of 10 kW.", node.Name)
-			nominalMax = "10000"
-		}
-
-		// append nominal power
-		nmf64, _ := strconv.ParseFloat(nominalMax, 64)
-		energyData = append(energyData, float64(nmf64))
-
-		sharesString := node.Annotations["renewable"]
+		sharesString := node.Annotations["renewables"]
 		if sharesString == "" {
-			log.Printf("Error parsing renewable share from node %v: No values found. Assigning a renewable energy share of 0.", node.Name)
-			sharesString = "0.0;0.0;0.0;0.0;0.0"
-		}
-
-		// split renewable string into slice with single values
-		shares := strings.Split(sharesString, ";")
-		// convert strings to floats and append to data
-		for i := 0; i < len(shares); i += 1 {
-			f64, _ := strconv.ParseFloat(shares[i], 64)
-			energyData = append(energyData, float64(f64))
+			log.Printf("Error parsing renewable share from node %v: No values found. Assigning renewable energy shares of 0.", node.Name)
+			for i := 0; i < windowSize; i += 1 {
+				energyData = append(energyData, 0.0)
+			}
+		} else {
+			// split renewable string into slice with single values
+			shares := strings.Split(sharesString, ";")
+			// convert strings to floats and append to data
+			for i := 0; i < windowSize; i += 1 {
+				f64, _ := strconv.ParseFloat(shares[i], 64)
+				energyData = append(energyData, float64(f64))
+			}
 		}
 
 		// Logs for Debugging
-		log.Printf("Nominal Power and Renewable shares parsed from Node %v: %v", node.Name, energyData)
+		log.Printf("Renewable shares parsed from Node %v: %v", node.Name, energyData)
 
 		nodeEnergyData[node.Name] = energyData
 	}
@@ -91,25 +82,27 @@ func normalizeScores(weightedScores map[string]float64) map[string]int {
 	return normalizedNodeScores
 }
 
-func weightScores(nodeScores map[string][]float64, mode string, weight string) map[string]int {
+func weightScores(nodeScores map[string][]float64) map[string]int {
 
 	var weights []float64
-	var weightConstant, _ = strconv.ParseFloat(weight, 64)
 	weightedNodeScores := make(map[string]float64)
+	var scoreCount int
+
+	for _, scores := range nodeScores {
+		scoreCount = len(scores)
+		break
+	}
 
 	// exponential function to distribute weights to each renewable measurement
-	for i := 0.0; i < 5; i++ {
-		weights = append(weights, math.Pow(weightConstant, i)/(1-weightConstant))
+	for i := 0; i < scoreCount; i++ {
+		weights = append(weights, math.Pow(0.75, float64(i))/(1-0.75))
 	}
 
-	// favor-present is default
-	if mode == "favor-future" {
-		sort.Float64s(weights)
-	}
+	sort.Float64s(weights)
 
 	for node, scores := range nodeScores {
 
-		for i := 0; i < len(scores); i++ {
+		for i := 0; i < scoreCount; i++ {
 
 			scores[i] *= weights[i]
 		}
@@ -119,12 +112,12 @@ func weightScores(nodeScores map[string][]float64, mode string, weight string) m
 	return normalizeScores(weightedNodeScores)
 }
 
-func calculateRenewableScores(nodeShares map[string][]float64) map[string][]float64 {
+func calculateRenewableScores(nodeShares map[string][]float64, windowSize int) map[string][]float64 {
 
 	normalizedScores := make(map[string][]float64)
 
-	// go through all five renewable shares (10m, 1h, 4h, 12h, 24h) of each node
-	for currentShare := 0; currentShare < 5; currentShare++ {
+	// go through all renewable shares of each node
+	for currentShare := 0; currentShare < windowSize; currentShare++ {
 
 		highest := 1.0
 		lowest := 0.0
@@ -157,17 +150,13 @@ func calculateRenewableExcess(energyData map[string][]float64, currentUtilizatio
 
 	for node := range energyData {
 
-		var maxInput float64
 		var nodeRenewableExcess []float64
 		var currentNodeUtilization = currentUtilization[node]
 
-		// split nominal power and renewable shares
-		maxInput, energyData[node] = energyData[node][0], energyData[node][1:]
-
 		// calculate consumption and round to two decimal places
-		var currentInput = roundToTwoDecimals(maxInput * currentNodeUtilization)
+		var currentInput = roundToTwoDecimals(RATED_POWER_NODE * currentNodeUtilization)
 
-		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current consumption of %v W", node, maxInput, math.Round(currentNodeUtilization*1000)/10, currentInput)
+		log.Printf("Node %v with max input of %v W and current utilization of %v %% has a current consumption of %v W", node, RATED_POWER_NODE, math.Round(currentNodeUtilization*1000)/10, currentInput)
 
 		// calculate renewable energy excess for current node utilization
 		for _, renewableShare := range energyData[node] {
@@ -227,21 +216,26 @@ func calculateCpuUtilization(nodeList *v1.NodeList) map[string]float64 {
 
 func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
-	// default
-	if mode == "" {
-		mode = "favor-present"
-	}
-	if weight == "" {
-		weight = "0.75"
+	var windowSize int
+
+	switch mode {
+	case "s":
+		windowSize = 2
+	case "m":
+		windowSize = 5
+	case "l":
+		windowSize = 13
+	case "xl":
+		windowSize = 25
+	default:
+		windowSize = 1
 	}
 
-	log.Printf("Scheduling mode %v with a weight distribution constant of %v", mode, weight)
-
-	var energyData = parseDataFromNodes(nodeList)
+	var energyData = parseDataFromNodes(nodeList, windowSize)
 	var currentUtilization = calculateCpuUtilization(nodeList)
 	var renewableExcess = calculateRenewableExcess(energyData, currentUtilization)
-	var nodeScores = calculateRenewableScores(renewableExcess)
-	var weightedTotalScores = weightScores(nodeScores, mode, weight)
+	var nodeScores = calculateRenewableScores(renewableExcess, windowSize)
+	var weightedTotalScores = weightScores(nodeScores)
 
 	for key, value := range weightedTotalScores {
 		log.Printf("Total weighted score calculated for Node %v: %v", key, value)
