@@ -166,7 +166,9 @@ kubectl get pods -n kube-system
 ```
 kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-extender-ctr -f
 
-kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-ctr -f | grep -i 'score'
+kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-ctr -f | grep -i 'green-k8s-test'
+
+
 ```
 
 #####  Deploy test pods:

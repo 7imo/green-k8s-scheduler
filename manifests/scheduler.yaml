@@ -59,8 +59,7 @@ data:
       {"name" : "LeastRequestedPriority", "weight" : 1},
       {"name" : "BalancedResourceAllocation", "weight" : 1},
       {"name" : "ServiceSpreadingPriority", "weight" : 1},
-      {"name" : "ImageLocalityPriority", "weight" : 1},
-      {"name" : "EqualPriority", "weight" : 1}
+      {"name" : "ImageLocalityPriority", "weight" : 1}
     ],
     "extenders" : [{
       "urlPrefix": "http://localhost:80",
@@ -128,4 +127,4 @@ spec:
         env:
         - name: MODE
           # allows the user to adjust the scheduler to the runtime of the apps to be scheduled
-          value: "M" # xs, s, m, l, xl - default is xs
+          value: "XL" # xs, s, m, l, xl - default is xs
