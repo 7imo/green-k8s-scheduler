@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: green-k8s-test
-  replicas: 1
+  replicas: 8
   template:
     metadata:
       labels:

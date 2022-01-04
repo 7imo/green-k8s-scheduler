@@ -6,14 +6,14 @@ import (
 	extender "k8s.io/kube-scheduler/extender/v1"
 )
 
-// you can't see existing scores calculated so far by default scheduler
-// scores output by this function will be added back to default scheduler
+// scores returned by this function will be added back to default scheduler
 func prioritize(args extender.ExtenderArgs) *extender.HostPriorityList {
 	pod := args.Pod
 	nodes := args.Nodes.Items
 
 	log.Printf("Calculating node priorities for pod %v ...", pod.Name)
 
+	// call green-k8s-scheduler logic
 	nodeScoreMap := calculateScoresFromRenewables(args.Nodes)
 	hostPriorityList := make(extender.HostPriorityList, len(nodes))
 

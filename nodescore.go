@@ -16,10 +16,11 @@ import (
 	v1 "k8s.io/api/core/v1"
 )
 
+// score and node constants
 const MAX_SCORE = 10.0
 const RATED_POWER_NODE = 10000
 
-// reads envs from deployment
+// read mode which was set in the scheduler.yaml
 var mode = strings.ToLower(os.Getenv("MODE"))
 
 func parseDataFromNodes(nodeList *v1.NodeList, windowSize int) map[string][]float64 {
@@ -47,8 +48,7 @@ func parseDataFromNodes(nodeList *v1.NodeList, windowSize int) map[string][]floa
 			}
 		}
 
-		// Logs for Debugging
-		log.Printf("Renewable shares parsed from Node %v: %v", node.Name, energyData)
+		log.Printf("Renewable shares parsed from node %v: %v", node.Name, energyData)
 
 		nodeEnergyData[node.Name] = energyData
 	}
@@ -100,6 +100,7 @@ func weightScores(nodeScores map[string][]float64) map[string]int {
 
 	sort.Float64s(weights)
 
+	// apply weights to scores
 	for node, scores := range nodeScores {
 
 		for i := 0; i < scoreCount; i++ {
@@ -218,6 +219,7 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 
 	var windowSize int
 
+	// set windows size for renewable energy (forecast) values to be considered
 	switch mode {
 	case "s":
 		windowSize = 2
@@ -231,10 +233,19 @@ func calculateScoresFromRenewables(nodeList *v1.NodeList) map[string]int {
 		windowSize = 1
 	}
 
+	// get data from annotations
 	var energyData = parseDataFromNodes(nodeList, windowSize)
+
+	// calculate current energy consumption per node
 	var currentUtilization = calculateCpuUtilization(nodeList)
+
+	// calculate renewable energy excess per node
 	var renewableExcess = calculateRenewableExcess(energyData, currentUtilization)
+
+	// calculate scores per renewable data period
 	var nodeScores = calculateRenewableScores(renewableExcess, windowSize)
+
+	// calculate total score per node
 	var weightedTotalScores = weightScores(nodeScores)
 
 	for key, value := range weightedTotalScores {

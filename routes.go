@@ -16,28 +16,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome to the green K8s scheduler!\n")
 }
 
-func Filter(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	var buf bytes.Buffer
-	body := io.TeeReader(r.Body, &buf)
-	var extenderArgs schedulerapi.ExtenderArgs
-	var extenderFilterResult *schedulerapi.ExtenderFilterResult
-	if err := json.NewDecoder(body).Decode(&extenderArgs); err != nil {
-		extenderFilterResult = &schedulerapi.ExtenderFilterResult{
-			Error: err.Error(),
-		}
-	} else {
-		extenderFilterResult = filter(extenderArgs)
-	}
-
-	if response, err := json.Marshal(extenderFilterResult); err != nil {
-		log.Fatalln(err)
-	} else {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(response)
-	}
-}
-
+// route to priority function
 func Prioritize(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var buf bytes.Buffer
 	body := io.TeeReader(r.Body, &buf)

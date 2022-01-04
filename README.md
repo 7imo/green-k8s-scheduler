@@ -9,7 +9,6 @@ sudo mv kops-darwin-amd64 /usr/local/bin/kops
 brew install kubernetes-cli
 pip install awscli
 ```
-Note: Latest kOps version (1.22) breaks the extender
 
 #####  Set up AWS according to https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/setting-up.html
 
@@ -92,7 +91,7 @@ kops create cluster \
     --master-count=1 \
     --master-size=t2.medium \
     --node-size=t2.small \
-    --zones="us-east-1a" \
+    --zones=us-east-1a,us-east-1b,us-east-1c,us-east-1d \
     --cloud-labels="purpose=thesis" \
     ${NAME}
 ```
@@ -134,9 +133,6 @@ kops delete cluster --name ${NAME} --yes
 ```
 
 #####  Troubleshooting 
-https://www.poeticoding.com/create-a-high-availability-kubernetes-cluster-on-aws-with-kops/
-https://serverfault.com/questions/993888/kubernetes-with-kops-in-aws-how-to-attach-iam-policies-to-the-iam-role-used-to
-
 For kubectl error: You must be logged in to the server (Unauthorized) set state store env variable and export kubecfg:
 ```
 kops export kubecfg --admin 
@@ -166,34 +162,10 @@ kubectl get pods -n kube-system
 ```
 kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-extender-ctr -f
 
-kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-ctr -f | grep -i 'green-k8s-test'
-
-
+kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler-ctr -f > scheduler.log
 ```
 
 #####  Deploy test pods:
 ```
-kubectl apply -f Deployment.yaml
+kubectl apply -f manifests/deployment.yaml
 ```
-
-#####  Troubleshooting: 
-```
-kubectl describe pod nginx-deployment-7bcbdc8dfd-24224
-kubectl logs green-k8s-descheduler-56d745498f-km96r -n kube-system -p
-kubectl describe pods green-k8s-scheduler-584f5649b8-4dgxv  -n kube-system
-kubectl logs -f green-k8s-scheduler-584f5649b8-4dgxv -c green-k8s-scheduler-extender-ctr -p
-kubectl -n kube-system logs deploy/green-k8s-scheduler -c green-k8s-scheduler -f
-kubectl get deployment green-k8s-descheduler --namespace=kube-system
-kubectl delete deployment green-k8s-descheduler -n kube-system
-```
-
-# Manual annotation / labeling
-```
-kubectl annotate nodes <your-node-name> renewable=0.6
-```
-
-### aob
-https://stackoverflow.com/questions/59741353/cannot-patch-kubernetes-node-using-python-kubernetes-client-library
-https://deepdive.tw/2017/01/04/installing-kubernetes-on-aws-with-kops/
-https://stackoverflow.com/questions/62803041/how-to-evict-or-delete-pods-from-kubernetes-using-golang-client
-https://math.stackexchange.com/questions/684519/what-is-the-most-scientific-way-to-assign-weights-to-historical-data/684629
