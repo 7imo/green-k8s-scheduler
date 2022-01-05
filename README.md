@@ -120,7 +120,7 @@ sudo grep -i 'score' kube-scheduler.log
 kubectl get nodes -o wide
 ```
 
-#####  run metrics-server
+#####  run metrics-server (needed to get CPU utilization)
 ```
 kubectl apply -f manifests/metrics-server.yaml
 kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes

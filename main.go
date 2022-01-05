@@ -11,15 +11,12 @@ var (
 	version string
 )
 
-//func init() {
-//	rand.Seed(time.Now().UTC().UnixNano())
-//}
-
 func main() {
+	// http server that is called by the kube-scheduler
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.GET("/version", Version)
 	router.POST("/prioritize", Prioritize)
-
+	// extender port
 	log.Fatal(http.ListenAndServe(":80", router))
 }
